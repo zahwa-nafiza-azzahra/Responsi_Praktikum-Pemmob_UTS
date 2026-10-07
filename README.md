@@ -8,13 +8,25 @@ Dibuat untuk memenuhi seluruh spesifikasi pada modul:
 ---
 
 ## 📋 Daftar Isi
-1. [Fitur Utama](#-fitur-utama)
-2. [Persyaratan Teknis & Arsitektur (MVVM)](#-persyaratan-teknis--arsitektur-mvvm)
-3. [Teknologi & Library](#-teknologi--library)
-4. [Struktur Proyek](#-struktur-proyek)
-5. [Integrasi REST API (RAWG)](#-integrasi-rest-api-rawg)
-6. [Tampilan Antarmuka (Screens)](#-tampilan-antarmuka-screens)
-7. [Petunjuk Menjalankan Aplikasi](#-petunjuk-menjalankan-aplikasi)
+1. [Tangkapan Layar Aplikasi (Screenshots)](#-tangkapan-layar-aplikasi-screenshots)
+2. [Fitur Utama](#-fitur-utama)
+3. [Persyaratan Teknis & Arsitektur (MVVM)](#-persyaratan-teknis--arsitektur-mvvm)
+4. [Teknologi & Library](#-teknologi--library)
+5. [Struktur Proyek](#-struktur-proyek)
+6. [Integrasi REST API (RAWG)](#-integrasi-rest-api-rawg)
+7. [Penjelasan Antarmuka (Screens)](#-penjelasan-antarmuka-screens)
+8. [Petunjuk Menjalankan Aplikasi](#-petunjuk-menjalankan-aplikasi)
+
+---
+
+## 📸 Tangkapan Layar Aplikasi (Screenshots)
+
+Berikut adalah tangkapan layar langsung dari aplikasi saat dijalankan pada perangkat Android:
+
+| 1. Home Screen (Katalog Game) | 2. Fitur Pencarian (Search Bar) | 3. Game Detail Screen |
+|:---:|:---:|:---:|
+| <img src="img/Screenshot_20261007_201519.png" width="260" alt="Home Screen"/> | <img src="img/Screenshot_20261007_201641.png" width="260" alt="Search Functionality"/> | <img src="img/Screenshot_20261007_201613.png" width="260" alt="Detail Screen"/> |
+| *Katalog Grid responsif dengan rating bintang, tanggal rilis ISO 8601, & skor Metacritic* | *Pencarian real-time dengan filter instan dan debouncing coroutine* | *Rincian lengkap game: hero banner, rating, genre, platform, developer, & deskripsi* |
 
 ---
 
@@ -22,14 +34,15 @@ Dibuat untuk memenuhi seluruh spesifikasi pada modul:
 
 - **Katalog Video Game (Home Screen)**:
   - Menampilkan kumpulan game dalam layout modern responsif menggunakan `LazyVerticalGrid`.
-  - Dilengkapi thumbnail cover art beresolusi tinggi, judul game, badge rating angka bintang, dan tanggal rilis format ISO 8601 (`YYYY-MM-DD`).
-  - Badge Metacritic score untuk game populer.
+  - Dilengkapi thumbnail cover art beresolusi tinggi, judul game, badge rating angka bintang (contoh: `⭐ 4.9`), dan tanggal rilis format ISO 8601 (`YYYY-MM-DD`).
+  - Badge Metacritic score (`MC 92`, `MC 73`, dll) untuk indikator kualitas game.
 - **Pencarian Real-Time (Search Functionality)**:
   - Search bar interaktif dengan teknik debounce coroutine (400ms) untuk optimasi panggilan API tanpa lag.
-  - Pencarian mendukung nama judul game, genre, maupun platform.
+  - Pencarian dinamis mendukung nama judul game, genre, maupun platform.
+  - Dilengkapi tombol hapus (*Clear button*) cepat untuk mereset pencarian.
 - **Halaman Detail Game (Game Detail Screen)**:
-  - Hero image banner dinamis dengan gradient overlay.
-  - Informasi judul lengkap, rating angka (misal `4.7 / 5.0`), tanggal rilis ISO 8601, chip genre interaktif, label platform yang didukung, dan studio pengembang (developer).
+  - Hero image banner dinamis dengan efek transisi gradient fade yang halus ke latar belakang.
+  - Informasi judul game lengkap, rating angka (misal `⭐ 4.9 / 5.0`), tanggal rilis format ISO 8601 (`📅 2026-05-21`), chip genre interaktif, label platform yang didukung, dan studio pengembang (*developer*).
   - Deskripsi lengkap game dengan pembersihan tag HTML otomatis (*clean description*).
   - Tombol navigasi kembali (*Back Navigation*) ke halaman utama.
 - **State-Driven UI & Penanganan Recomposition**:
@@ -144,27 +157,44 @@ app/src/main/java/com/example/responsipraktikum/
      - Mengambil rincian lengkap spesifik suatu video game.
 - **Data yang ditampilkan**:
   1. Nama game (`name`)
-  2. Rating dalam angka (`rating`, misal: `4.5`)
-  3. Tanggal rilis format ISO 8601 (`released`, contoh: `YYYY-MM-DD` / `2026-12-31`)
+  2. Rating dalam angka (`rating`, misal: `4.9` atau `4.8`)
+  3. Tanggal rilis format ISO 8601 (`released`, contoh: `YYYY-MM-DD` / `2026-05-21`)
   4. Deskripsi game (`description` / `description_raw`)
-  5. Fitur tambahan: Gambar sampul (`background_image`), Skor Metacritic, Daftar Genre, Daftar Platform, dan Pengembang.
+  5. Fitur tambahan: Gambar sampul (`background_image`), Skor Metacritic (`metacritic`), Daftar Genre (`genres`), Daftar Platform (`platforms`), dan Pengembang (`developers`).
 
 ---
 
-## 📱 Tampilan Antarmuka (Screens)
+## 📱 Penjelasan Antarmuka (Screens)
 
-1. **Home Screen**:
-   - Header aplikasi dengan ikon joystick dan judul *Game Vault*.
-   - Tombol pengaturan kunci API (*Key Icon*) pada TopAppBar.
-   - Kolom pencarian dinamis (*Search Bar*) dengan tombol hapus cepat (*Clear Button*).
-   - Kartu Game Grid (`LazyVerticalGrid`) dengan sudut membulat (*Rounded Corner*), efek elevasi, rating bintang, dan tag tanggal rilis ISO 8601.
-2. **Game Detail Screen**:
-   - Gambar sampul heroik (*Hero Cover Image*) dengan efek gradien transisi halus ke latar belakang.
-   - Judul game tipografi tebal (*Extra Bold*).
-   - Baris badge metrik: Rating bintang emas, Tanggal Rilis format ISO 8601, dan Skor Metacritic hijau.
-   - Chip genre bernuansa Cyber Violet.
-   - Tag platform yang kompatibel.
-   - Bagian Deskripsi Game dengan format teks bersih dan nyaman dibaca.
+### 1. Home Screen (`HomeScreen.kt`)
+- **Top App Bar**: Menampilkan judul aplikasi (*Game Vault*), subjudul (*Katalog & Eksplorasi Video Game*), ikon kontroler game, serta tombol ikon kunci (*Key Icon*) untuk memasukkan atau memperbarui RAWG API Key kapan saja.
+- **Search Bar**: Kolom teks pencarian dinamis dengan ikon kaca pembesar (*Search*) dan tombol silang (*Clear*) untuk membersihkan input teks dalam satu kali klik.
+- **Grid Layout (`LazyVerticalGrid`)**: Menyusun kartu-kartu game dalam 2 kolom grid yang adaptif terhadap ukuran layar.
+- **Komponen Kartu (`GameCard`)**:
+  - Gambar sampul game dimuat asinkron via Coil dengan efek sudut membulat (*Rounded Corner*).
+  - Badge rating angka bintang di pojok kanan atas kartu (contoh: `⭐ 4.9`).
+  - Badge skor Metacritic warna hijau di pojok kiri bawah gambar jika tersedia (`MC 92`, `MC 73`).
+  - Judul game teks tebal dengan limit satu baris dan elipsis.
+  - Tanggal rilis format ISO 8601 dengan ikon kalender (`📅 2026-05-21`).
+
+### 2. Fitur Pencarian Real-Time (`HomeScreen.kt`)
+- Menghubungkan input teks pengguna langsung ke `HomeViewModel.searchQuery`.
+- Menggunakan operator Coroutine Flow `debounce(400)` dan `distinctUntilChanged()` agar pemanggilan REST API hanya terjadi setelah jeda ketik 400ms, menghemat kuota request API dan menjaga performa recomposition tetap ringan.
+- Hasil pencarian menampilkan game yang relevan secara instan (contoh pada tangkapan layar saat mengetik huruf `z`, muncul kumpulan seri *Dragon Ball Z*, *Age of Z*, dsb).
+
+### 3. Game Detail Screen (`DetailScreen.kt`)
+- **Top App Bar**: Judul "Detail Game" dengan tombol panah navigasi kembali (*Back Button*) ke Home Screen.
+- **Hero Image Banner**: Gambar sampul beresolusi tinggi dengan gradasi vertikal halus (*gradient overlay*) menyatu dengan warna tema.
+- **Judul Game**: Tipografi ekstra tebal (*Extra Bold*) ukuran 26sp.
+- **Metadata Badges**:
+  - Rating angka emas terformat `⭐ 4.9 / 5.0`.
+  - Tanggal rilis format ISO 8601 `📅 2026-05-21`.
+  - Chip skor Metacritic warna hijau.
+- **Kategori & Platform**:
+  - Flow chips untuk **Genre** (contoh: *Adventure*, *Action*, *RPG*).
+  - Flow chips untuk **Platform Tersedia** (contoh: *PC*, *PlayStation*, *Xbox*).
+  - Label studio **Pengembang** (*Developer*).
+- **Deskripsi Game**: Menampilkan teks narasi dan sinopsis game lengkap yang telah dibersihkan dari tag HTML (*clean description*).
 
 ---
 
@@ -173,11 +203,10 @@ app/src/main/java/com/example/responsipraktikum/
 1. **Buka Proyek di Android Studio**:
    - Buka Android Studio, pilih **Open** dan arahkan ke direktori proyek ini.
 2. **Sinkronisasi Gradle**:
-   - Android Studio akan secara otomatis mengunduh dependensi Gradle.
-3. **Konfigurasi API Key (Opsional)**:
-   - Dapatkan API Key gratis di [RAWG API Docs](https://rawg.io/apidocs).
-   - Masukkan API Key pada `ApiClient.kt` atau langsung melalui tombol ikon kunci pada tampilan Home Screen aplikasi.
-   - *(Catatan: Aplikasi telah dilengkapi katalog fallback otomatis sehingga tetap berfungsi penuh meskipun tanpa API key).*
+   - Klik **Sync Project with Gradle Files** (ikon gajah).
+3. **Konfigurasi API Key**:
+   - API Key resmi telah terpasang di `ApiClient.kt`.
+   - Atau bisa diganti langsung melalui tombol ikon kunci di pojok kanan atas aplikasi.
 4. **Jalankan Aplikasi**:
    - Pilih emulator atau perangkat fisik Android (Min SDK: 29 / Android 10+).
    - Klik tombol **Run 'app'** (Shift + F10).
