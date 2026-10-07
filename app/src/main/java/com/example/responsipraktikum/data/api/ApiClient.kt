@@ -14,9 +14,8 @@ object ApiClient {
 
     /**
      * Default RAWG API Key holder.
-     * Replace with your RAWG API Key from https://rawg.io/apidocs
      */
-    var currentApiKey: String = "YOUR_RAWG_API_KEY"
+    var currentApiKey: String = "36fad56f5588476a94bba06ae6793517"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
